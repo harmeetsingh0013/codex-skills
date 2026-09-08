@@ -61,6 +61,8 @@ The generated project must include, as applicable:
 - GitHub Actions CI;
 - the selected packaging/build type.
 
+Generated example code, unit tests, and integration tests must not use deprecated APIs. Prefer current supported replacements, even when the deprecated form would be shorter or easier to scaffold. If a requested example would require a deprecated API, use a non-deprecated alternative or explain that the requested combination is incompatible.
+
 For web/REST applications, the example must include a security layer with JWT authentication and protected REST endpoints. Follow `references/security.md`.
 
 No database is required for the example. Use in-memory collections such as `List`, `Map`, or thread-safe `ConcurrentMap`/`ConcurrentHashMap` as appropriate.
@@ -211,6 +213,7 @@ Provide separate Gradle tasks:
 - `e2eTest` when enabled.
 
 Integration tests must exercise the real application boundary and security behavior, not merely assert that configuration loads.
+Treat deprecation warnings in generated application code, unit tests, and integration tests as defects. Fix them before declaring the project complete unless the user explicitly requested a legacy API example and no supported alternative exists.
 
 When Playwright is selected, add at least one meaningful happy-path E2E test and, for web applications, one useful negative security scenario where practical.
 
@@ -237,6 +240,7 @@ Also consider:
 Do not add unnecessary tools merely to satisfy a checklist; document each selected tool.
 
 Reports should live under predictable `build/reports/` paths.
+Do not leave deprecated API usage in generated source, tests, or examples merely because the build still passes. If a compiler or static-analysis warning reveals a deprecated API in any generated code path, revise the code until the warning is gone.
 
 ## Packaging
 

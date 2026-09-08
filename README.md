@@ -5,5 +5,5 @@
 Codex user-level skills are installed under:
 
 ``` text
-$HOME/.agents/skills
+$HOME/.codex/skills
 ```

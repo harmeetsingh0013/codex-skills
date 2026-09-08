@@ -34,7 +34,9 @@ Do not generate the project until the user has supplied:
 1. Application/project name
 2. Application/project description
 
-If either is missing, ask for it and stop project generation.
+If either is missing, infer a sensible suggestion from the information already supplied in the request. Present the suggested project name and/or description to the user and ask them to confirm, revise, or replace it before proceeding. Do not silently assume a suggestion or generate files before the user confirms it. If the request is too sparse to support a reasonable suggestion, ask a focused question instead.
+
+The Java package for all generated example code must be **`in.harmeetsingh.example`** (and subpackages beneath it, such as `in.harmeetsingh.example.web` and `in.harmeetsingh.example.service`). Do not use `com.example` or another placeholder base package. This base package is fixed for this skill regardless of the project name. Ensure reference examples, `settings.gradle.kts` (while keeping `rootProject.name` set to the project name), source directories, and README references use it consistently.
 
 The selected Java version must:
 - be an LTS release;
@@ -72,16 +74,15 @@ No database is required for the example. Use in-memory collections such as `List
 Collect only information not already supplied.
 
 Recommended order:
-1. project name;
-2. project description;
-3. Java LTS version;
-4. application type: CLI, desktop, or web;
-5. framework, when applicable;
-6. minimal example/use case, unless already provided;
-7. packaging/build type;
-8. Playwright E2E yes/no.
+1. project name and project description: use supplied values when present; otherwise suggest them from the user's stated domain, application type, framework, features, and use case, then obtain confirmation;
+2. Java LTS version;
+3. application type: CLI, desktop, or web;
+4. framework, when applicable;
+5. minimal example/use case, unless already provided;
+6. packaging/build type;
+7. Playwright E2E yes/no.
 
-Do not ask questions whose answers are already explicit in the user's request.
+Do not ask questions whose answers are already explicit in the user's request. When suggesting a missing name or description, show the proposed value and let the user accept, edit, or replace it rather than asking a bare generic question.
 
 Before generating files, present a concise resolved plan containing:
 - Java version;

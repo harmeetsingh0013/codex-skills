@@ -1,6 +1,6 @@
 ---
 name: project-discovery
-description: Run a bounded initial discovery interview for a 45-minute Java 25 and Spring Boot 4 coding exercise. Ask up to five high-value questions with three options each, then offer a user-controlled checkpoint for finalization, adding requirements, or exactly one optional extension round. Generate a concise project brief and ready-to-run GitHub Spec Kit prompts. Use when starting an interview problem or turning an ambiguous problem statement into an achievable MVP.
+description: Run a bounded, two-round discovery interview for a 45-minute Java 25 and Spring Boot 4 coding exercise. Ask up to five high-value initial questions with three options each, offer a brief decision checkpoint and optional user-requested follow-up, then produce a concise project brief and ready-to-run GitHub Spec Kit constitution and specify prompts. Use when starting an interview problem or turning an ambiguous problem statement into an achievable MVP.
 ---
 
 # Project Discovery — 45-Minute Java/Spring Boot Interview
@@ -22,14 +22,14 @@ This skill **only** conducts discovery and creates artifacts. Do not run Spec Ki
 
 **Precedence:** Explicit interviewer requirements > existing repository constraints and approved decisions > these defaults. Do not question the user about the fixed stack unless there is a conflict that blocks implementation. Do not put all these technology choices into the *functional* specification; they belong in planning and only enduring principles belong in the constitution.
 
-## Default process: at most two rounds, five questions total
+## Default process: at most two automatic rounds, five initial questions total
 
 ### At invocation
 
 1. If the user has not given a problem, ask **only**: "What problem did the interviewer give you? Paste the exact statement if available." This intake is not one of the five design questions. Do not infer a problem.
 2. Read the stated problem and, if available, relevant user-provided requirements or project documents. Preserve explicit acceptance criteria and constraints verbatim in meaning.
 3. Extract what is known, likely MVP, risks, and unanswered questions. Do not re-ask answered questions.
-4. If the statement is already specific enough to implement, ask **zero** questions and go straight to the discovery checkpoint. If the user explicitly requests immediate output, generate artifacts instead.
+4. If the statement is already specific enough to implement, ask **zero** questions and proceed to the brief decision checkpoint. Never invent missing business requirements.
 
 ### Round 1 — requirements (0–3 questions)
 
@@ -48,33 +48,32 @@ Round 2 must not merely reword previous questions. If no critical ambiguity rema
 
 ### Question format
 
-- **Default discovery:** maximum five questions total and two question batches. Number consecutively Q1–Q5. **Only an explicit `CONTINUE` can authorize more questions**, up to three per additional round.
+- **Maximum five questions in the initial interview**, **maximum two automatic question batches**. Number consecutively Q1–Q5. Extra questions are permitted only if explicitly requested by the user at a checkpoint.
 - Each question has **exactly three** distinct context-specific options **A/B/C** with a short trade-off for each. Mark one **Recommended**, with a one-sentence rationale.
 - Allow free-form / "Other" answers in addition to A/B/C; do not make a fourth enumerated option.
 - Ask the user to reply compactly (e.g. `1B, 2A, 3C`) or override an option.
 - Do not ask broad preference questions already fixed by Java 25 + Spring Boot 4.
-- Do not ask the user to approve each artifact or reopen discovery after the limit.
+- Do not ask the user to approve each artifact. After the initial questions, provide one compact decision checkpoint rather than automatically extending discovery.
 
-### Discovery checkpoint — mandatory after default rounds
+### Decision checkpoint and user-controlled extension
 
-After the default questioning phase, **stop asking questions** and show a compact summary of decisions and remaining risks. Offer a single clear choice:
+After the default questions have been answered (or none are needed), show a **compact decision checkpoint**: Given, Decided, Assumed, Unresolved, and the intended MVP boundary. This is a short summary, not another questionnaire. Then offer these actions:
 
-- `FINALIZE` (or `FAST-FORWARD`, `DONE`): create/update the three artifacts and finish.
-- `CONTINUE [topic]`: authorize **one and only one** additional round of **up to three** targeted questions, each with A/B/C options, recommendation, and trade-offs. After answers, return to this checkpoint. Do not assume another `CONTINUE`.
-- `ADD REQUIREMENT: ...`: incorporate user-provided requirements, check conflicts and impact on existing decisions, then return to checkpoint **without automatically asking a new batch**. If a blocker emerges, mention it and offer `CONTINUE [topic]`.
-- `REVISIT Q<n>: ...`: replace or refine that decision, note downstream effects, and return to checkpoint. Don't rerun previous questions.
+- `FINALIZE` — write the three artifacts now (recommended in a time-limited interview).
+- `CONTINUE` — ask **one** optional additional batch of up to three new, high-value A/B/C questions based on unresolved issues or the user's specified focus; then return to the checkpoint. Never start another batch unless `CONTINUE` is explicitly requested again.
+- `ADD REQUIREMENT: <text>` — record the user-supplied requirement verbatim in meaning, check for contradictions and affected decisions, and return to the checkpoint. Ask a clarifying question only if the new requirement cannot be interpreted safely; do not silently change prior choices.
+- `REVISIT Q<n>: <new answer or clarification>` — revise that answer and dependent decisions, mark affected assumptions, and return to the checkpoint.
+- `FAST-FORWARD`, `SKIP`, or `DONE` — aliases for `FINALIZE`.
 
-If user asks for new requirements or an extra round **after** artifacts are generated, resume using the existing project brief and conversation decisions. Do not restart from scratch. Update the three files while preserving unrelated user edits; flag conflicts instead of silently overwriting manually edited content.
+If user requests artifacts at any point, immediately finalize without further questions. If user reports discovery time is up, finalize immediately; do not wait for checkpoint approval. Never silently reinterpret unapproved recommendations as requirements.
 
-### Hard stops and budget
+After an optional batch, do not automatically ask more questions. Keep question numbering unique across batches. Do not use the 5-question initial cap to block an explicitly requested extension; **the additional rounds are strictly opt-in**.
 
-- Never initiate an extra round without an explicit `CONTINUE` command or an unambiguous request for another question round.
-- Never ask more than three questions in any authorized extra round; return to checkpoint after each round.
-- `FINALIZE`, `FAST-FORWARD`, `SKIP`, `DONE`, or request to generate artifacts means **generate immediately**, no further questioning.
-- If the user says the five-minute discovery budget has expired, stop interviewing and finalize with labeled assumptions, without a confirmation gate.
-- If the user provides incomplete answers, choose clearly labeled MVP assumptions for noncritical details and flag blockers as **Unresolved**.
-- Keep track of the number of questions and extension rounds in the current conversation; recap briefly at the checkpoint. Do not assert actual elapsed time without a clock.
-- An extra round is optional and knowingly takes time away from implementation. Prioritize preserving the 45-minute interview goal.
+For unfinished or incomplete answers, label pragmatic noncritical defaults **Assumed**, and critical unanswered items **Unresolved**. Do not claim they are decided. If a critical unresolved item blocks implementation, note the blocker in the brief rather than inventing its answer.
+
+### Updating discovery after artifact generation
+
+If the user asks to add requirements or continue after files already exist, read the existing project brief and discovery artifacts first, preserve previously Given/Decided items, apply only user-approved changes, and regenerate the same three outputs. Never overwrite unrelated or manually edited content silently; explain conflicts and use alternative filenames when needed. Do not restart from the initial problem or auto-run further rounds.
 
 ## Discovery decision discipline
 
@@ -98,9 +97,9 @@ Never overwrite user-authored files silently: if existing output files contain u
 
 ## Final response — concise handoff
 
-When `FINALIZE` generates artifacts, show:
+After artifacts are created, show:
 - 2–4 sentences summarizing the MVP, decisions, and important assumptions.
 - The three artifact paths.
 - The immediate next action: paste `docs/discovery/constitution-prompt.md` into Codex; review constitution, then paste `docs/discovery/specify-prompt.md`; continue with `$speckit-plan`, `$speckit-tasks`, `$speckit-implement`, and run tests. Only suggest `$speckit-clarify` if a critical ambiguity survives.
 
-Do not restart questions automatically after creating artifacts. Only re-enter discovery if the user explicitly requests `CONTINUE`, `ADD REQUIREMENT`, or `REVISIT`. Do not claim the app is implemented or validated.
+Do not restart questions automatically after creating artifacts. Only resume discovery on explicit user request. Do not claim the app is implemented or validated.
